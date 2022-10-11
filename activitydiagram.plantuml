@@ -1,0 +1,35 @@
+@startuml activitydiagram
+(*) --> if "Client is logged in" then
+        --> [yes] "Show Thether spectacles"
+    else   
+        --> [no] if "Client is registered" then
+        --> [yes] "Log in"
+    else   
+        --> [no] "Register"
+        --> "Log in"
+    endif
+        --> "Show Thether spectacles"
+    endif
+    --> [Client Clicked on a spectacle] "Show  spectacle date and desciption"
+    --> [Client chose date] "Show ticket choice screen"
+    --> [Client chose tickets and discounts] "Show places choice screen"
+    --> [Client chose places] "Payment screen"
+    --> if "" then
+        --> [Card] "Redirect to card service"
+        --> "Verify card validity"
+        --> "Proceed payment in a bank"
+        --> "Confimation screen"
+        else
+        --> [Blik] "Redirect to Blik service"
+        --> "Verify payment in a Blik services"
+        --> "Confimation screen"
+    --> if "Client chooses invoice or receipt" then
+        --> [Invoice] "Ask for data for invoice"
+        --> "Send invoice to email"
+        --> "Send ticket to sms and email"
+        else
+        --> [Receipt] "Send receipt to email"
+        --> "Send ticket to sms and email"
+    "Send ticket to sms and email" -->(*)
+
+@enduml

@@ -1,0 +1,72 @@
+@startuml usercase 
+
+actor Person
+actor Client 
+actor "Registered Client"
+actor "Unregistered Client"
+
+actor "Theater Helpdesk"
+actor "Bank Helpdesk"
+
+actor "Blik payment"
+actor "Card payment"
+actor "Cards autentication services"
+
+usecase "help client with buying tickets"
+usecase "help client with transaction"
+usecase "check if card is valid"
+usecase "send debit card data to bank"
+usecase "send blik to a blik services"
+usecase "spectacle ticket summary page"
+usecase "send confirmation email with ticket"
+usecase "send confirmation sms with ticket"
+usecase "send invoice to email"
+
+usecase "register new account"
+usecase "call to theater helpdesk"
+usecase "call to bank helpdesk"
+usecase "login to an account"
+usecase "type in blik code"
+usecase "type in card numbers"
+
+(Registered Client) --|> Client : <<extends>>
+(Unregistered Client) --|> Client : <<extends>>
+
+Client --|> Person : <<extends>>
+(Theater Helpdesk) --|> Person : <<extends>>
+(Bank Helpdesk) --|> Person : <<extends>>
+
+(register new account) --|> (Registered Client) : <<invoke>>
+(Unregistered Client) -- (register new account)
+(Registered Client) -- (login to an account)
+
+(Registered Client) -- (call to theater helpdesk)
+(call to theater helpdesk) --|> (Theater Helpdesk) : <<invoke>>
+(Theater Helpdesk) -- (help client with buying tickets)
+
+(Registered Client) -- (call to bank helpdesk)
+(call to bank helpdesk) --|> (Bank Helpdesk) : <<invoke>>
+(Bank Helpdesk) -- (help client with transaction)
+
+(login to an account) -- (choose ticket details and payment type)
+(choose ticket details and payment type) -- (type in blik code) 
+(choose ticket details and payment type) -- (type in card numbers) 
+(type in blik code)  -- (Blik payment) : <<invoke>
+(type in card numbers) -- (Card payment) : <<invoke>
+(Cards autentication services)  -- (Card payment)
+(check if card is valid) -- (Cards autentication services) : <<invoke>
+(Cards autentication services) -- (send debit card data to bank)
+(Blik payment) -- (send blik to a blik services)
+
+(Blik payment) -- (spectacle ticket summary page)
+(Card payment) -- (spectacle ticket summary page)
+
+(spectacle ticket summary page) -- (send confirmation email with ticket)
+(spectacle ticket summary page) --(send confirmation sms with ticket)
+(spectacle ticket summary page) --(send invoice to email)
+
+
+
+
+@enduml
+

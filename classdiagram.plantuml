@@ -1,0 +1,107 @@
+@startuml usercase 
+
+class Person{
+    String Name 
+    String Surname
+    String PhoneNumber
+}
+
+class Client{
+    String Email
+}
+class Discount{
+    Int Percentage
+}
+
+class UnregisteredClient{
+    register()
+}
+
+class RegisteredClient{
+    String Password
+    logIn()
+    logOut()
+    buyTicket(TheaterTicketServices)
+    callBankHelpdesk(BankHelpdesk)
+    callTheaterHelpdesk(Theaterhelpdesk)
+}
+
+class TheaterHelpdesk{
+    Int EmployeeID
+}
+
+class BankHelpdesk{
+    Int EmployeeID
+}
+class SeatNumber{
+    Int Row
+    Int Column
+}
+
+class Ticket {
+    String TheaterName
+    String SpectacleTime
+    Int SpectacleLenght
+}
+
+class TheatherTicketServices{
+    scanDiscounts(Client)
+    scanSeatNumber(SeatNumber)
+    createInvoice(Invoice)
+    createTicket(Ticket)
+    createReceipt(Receipt)
+    callpayment(PaymentMethods)
+    sendConfirmationEmail(Invoice,Receipt,Ticket)
+    sendConfirmationSMS(Ticket)  
+}
+
+class Receipt{
+    Int Sum
+}
+class Invoice {
+    Int Sum
+    String NIPnumber
+    Int TaxRate
+}
+class PaymentMethods{
+    callBlik(BlikPayment)
+    callCard(CardPayment)
+}
+class BlikPayment{
+    String BlikCode
+    payBlik()
+}
+
+class CardPayment{
+    String CardNumber
+    String CardHolder
+    String CvvCode
+    checkValid(CardsAuthenticationServices)
+    payCard()
+}
+
+class CardsAuthenticationServices{
+    checkCardValidity(CardNumber,CardHolder,CvvCode)
+}
+
+
+Client --|> Person
+TheaterHelpdesk --|> Person
+BankHelpdesk --|> Person
+UnregisteredClient --|> Client
+RegisteredClient --|> Client
+BlikPayment --|> PaymentMethods
+CardPayment --|> PaymentMethods
+CardsAuthenticationServices --|> CardPayment
+
+SeatNumber --* "SeatNumber" Ticket
+Discount --* "Discount" RegisteredClient
+Client "Ticket" -- Ticket 
+Ticket "Receipt" -- Receipt
+Ticket "Invoice" -- Invoice
+TheatherTicketServices ..> Ticket : <<creates>>
+TheatherTicketServices ..> Receipt : <<creates>>
+TheatherTicketServices ..> Invoice : <<creates>>
+
+@enduml
+

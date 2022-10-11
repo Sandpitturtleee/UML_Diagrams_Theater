@@ -1,0 +1,64 @@
+@startuml sequence diagram
+actor Client
+
+Client -> "Theater Shop" : register
+alt client is registered
+return : status = OK show log in screen
+
+else wrong email and password format
+return : status = Fail
+loop 
+    Client -> "Theater Shop" : try to register succesfully
+    return status
+end 
+end
+
+Client -> "Theater Shop" : log in
+alt proper username and password
+return : status = OK show MainView
+
+else wrong username and password
+return : status = Fail
+loop 3 times
+    Client -> "Theater Shop" : try to log in
+    return status
+end 
+end
+
+Client -> "Theater Shop" : choose spectacle date
+"Theater Shop" -> Client : go to ticket choice
+
+loop until Client chose all tickets he wants
+    Client -> Client : select ticket with discount
+end
+loop until Client chose all places he wants
+    Client -> Client : select places in Theater hall
+end
+
+Client -> "Theater Shop" : proceed to payment methods
+"Theater Shop" -> Client : select payment method
+alt Card payment
+    Client -> "Theater Shop"
+    "Theater Shop" -> "Card authentication services" : check card validity
+    "Card authentication services" -> Bank : proceed with payment
+    Bank -> Client : pay me 
+    return 
+    Bank -> "Theater Shop" : payment finalized
+else Blik payment
+    Client -> "Theater Shop" : Blik payment
+    "Theater Shop" -> "Blik services" : proceed with payment
+    "Blik services" -> Client : pay me 
+    return 
+    "Blik services" -> "Theater Shop" : payment finalized
+end
+
+alt Invoice
+    "Theater Shop" -> Client : ask for data for Invoice
+    Client -> "Theater Shop" : give Invoice data
+    "Theater Shop" -> Client : send Invoice to email
+else Receipt
+    "Theater Shop" -> Client : send Receipt to email
+end
+"Theater Shop" -> Client : send Ticket to email and sms
+
+@enduml
